@@ -1,22 +1,31 @@
 from discord.ext import commands
+from TattlerDIR import TattlerConfigManager
 
+class TattlerBot:
 
-class TattlerBot(commands.Bot):
+    def __init__(self, bot):
+        self.bot = bot
+        self.configManager = TattlerConfigManager.ConfigManager()
+        self.configManager.load()
 
-    def __init__(self):
-        super().__init__(command_prefix='!')
-
-    async def on_ready(self):
+    @commands.command(pass_context=True)
+    async def bug(self, context, *, message):
+        if not self.channel_valid(context.message.channel, 'reportchannel'):
+            await self.bot.say("To report bugs please use {}".format(self.configManager.Discord['reportchannel']))
+            return
+        # TODO: Add a call that adds a bug to youtrack
+        await self.bot.say("Reporting Bug!")
         pass
 
-    @commands.command()
-    async def help(self, context):
+    @commands.command(pass_context=True)
+    async def request(self, context, *, message):
+        if not self.channel_valid(context.message.channel, 'reportchannel'):
+            await self.bot.say("To request a feature please use {}".format(self.configManager.Discord['reportchannel']))
+            return
+        # TODO: Add a call that adds a request to youtack
+        await self.bot.say("Adding Request!")
         pass
 
-    @commands.command()
-    async def bug(self, context, *, args):
-        pass
+    def channel_valid(self, channel, config_tag):
+        return self.configManager.Discord[config_tag] == 'ANY' or self.configManager.Discord[config_tag] == channel.name
 
-    @commands.command()
-    async def request(self, context, *, args):
-        pass
