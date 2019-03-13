@@ -22,13 +22,13 @@ class ConfigManager:
         config['Logging'] = {'Level': logging.NOTSET,
                              'LogFile': 'Tattler.log'}
 
-        config['Discord_Required'] = {'Token': '',
-                                      'ReportChannel': 'ANY'}
+        config['Discord'] = {'Token': '',
+                             'ReportChannel': 'ANY'}
 
         config['Discord_Optional'] = {'AnnouncementChannel': '',
                                       'DumpErrorsToGeneral': False}
 
-        config['YouTrack'] = {}
+        config['IssueTracker'] = {}
 
         with open(ConfigManager.CONFIG_FILE, 'w') as configfile:
             config.write(configfile)
