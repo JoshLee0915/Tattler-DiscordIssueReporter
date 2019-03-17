@@ -1,0 +1,3 @@
+[submodule "youtrack-rest-python-library"]
+	path = youtrack-rest-python-library
+	url = https://github.com/JoshLee0915/youtrack-rest-python-library.git
