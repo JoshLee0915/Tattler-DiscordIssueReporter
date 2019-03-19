@@ -4,8 +4,10 @@ import logging
 
 class ConfigManager:
     CONFIG_FILE = 'Tattler.cfg'
-    config = {}
-    projects = None
+
+    def __init__(self):
+        self.config = {}
+        self.projects = None
 
     def __getitem__(self, section):
         return self.config[section]
@@ -15,6 +17,9 @@ class ConfigManager:
             return self.config[item]
         else:
             super.__getattribute__(item)
+
+    def __contains__(self, item):
+        return item in self.config
 
     @staticmethod
     def generate_config():

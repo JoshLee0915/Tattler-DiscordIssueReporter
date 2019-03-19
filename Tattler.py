@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     TattlerDIR.trackerManager.register_issue_tracker('YouTrack', YouTrackTracker)
 
-    for project in config_manager.General['projects']:
+    for project in config_manager.get_projects():
         TattlerDIR.trackerManager.register_project(project)
 
     bot.load_extension("TattlerDIR")
