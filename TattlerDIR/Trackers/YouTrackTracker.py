@@ -1,25 +1,30 @@
 import json
 
 from YTClient.YTClient import YTClient
-from YTClient.YTDataClasses import Command
+from YTClient.YTDataClasses import Command, Project
 
 
 class YouTrackTracker:
-    SET_FIELDS_CMD = 'Set {field} {value}'
-    ADD_TAG_CMD = 'Add tag {tag}'
+    SET_FIELDS_CMD = '{field} {value}'
+    ADD_TAG_CMD = 'tag {tag}'
 
-    user_field = ''
-
-    request_type = 'Task'
-    bug_type = 'Bug'
-
-    request_tag = 'Feature Request'
-
-    def __init__(self, url, token):
+    def __init__(self, url, token, user_field):
         self.ytClient = YTClient(url=url, token=token)
+        self.user_field = user_field
+
+        self.request_type = 'Task'
+        self.bug_type = 'Bug'
+
+        self.request_tag = 'Feature Request'
 
     def create_issue(self, project_id, user, summary, description, issue_type):
-        user_command = self.SET_FIELDS_CMD.format(field=self.user_field, value=user)
+        user_command = self.SET_FIELDS_CMD.format(field=self.user_field, value='"{user}"')
+        user_command = user_command.format(user=user)
+
+        if not isinstance(project_id, Project):
+            project = Project(id=project_id)
+        else:
+            project = project_id
 
         if issue_type == 'Request':
             type_command = self.SET_FIELDS_CMD.format(field='Type', value=self.request_type)
@@ -31,7 +36,7 @@ class YouTrackTracker:
 
         cmd = '{} {}'.format(user_command, type_command)
 
-        issue_id = self.ytClient.create_issue(project_id, summary, description, return_fields='id')
-        self.ytClient.run_command(Command(issues='[{}]'.format(issue_id), query=cmd))
+        issue_id = self.ytClient.create_issue(project, summary, description)
+        self.ytClient.run_command(Command(issues=[str(format(issue_id['id']))], query=cmd))
 
         return json.loads(issue_id, encoding='utf-8')

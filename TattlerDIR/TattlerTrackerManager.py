@@ -2,8 +2,6 @@ from TattlerDIR.TattlerConfigManager import ConfigManager
 
 
 class TattlerTrackerManager(object):
-    issue_trackers = dict()
-    trackers = dict()
 
     def __init__(self, config_manager=None):
         if not config_manager:
@@ -11,6 +9,8 @@ class TattlerTrackerManager(object):
             config_manager.load()
 
         self.config_manager = config_manager
+        self.issue_trackers = dict()
+        self.trackers = dict()
 
     def register_issue_tracker(self, name, issue_tracker):
         if name not in self.issue_trackers:
@@ -27,13 +27,16 @@ class TattlerTrackerManager(object):
                                   self.config_manager[project_name]['url'],
                                   self.config_manager[project_name]['token'],
                                   self.config_manager[project_name]['discord'],
-                                  self.config_manager[project_name]['project_id'])
+                                  self.config_manager[project_name]['project_id'],
+                                  self.config_manager[project_name]['user_field'])
 
-    def setup_tracker(self, tracker, url, token, discord, project_id):
+    def setup_tracker(self, tracker, url, token, discord, project_id, user_field):
         if tracker not in self.issue_trackers or discord in self.trackers:
             return False
 
-        self.trackers[discord] = {'project_id': project_id, 'tracker': self.trackers[tracker](url=url, token=token)}
+        self.trackers[discord] = {'project_id': project_id, 'tracker': self.issue_trackers[tracker](url=url,
+                                                                                                    token=token,
+                                                                                                    user_field=user_field)}
         return True
 
     def get_tracker(self, discord):
