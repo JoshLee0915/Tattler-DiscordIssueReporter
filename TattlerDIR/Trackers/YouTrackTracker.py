@@ -36,7 +36,7 @@ class YouTrackTracker:
 
         cmd = '{} {}'.format(user_command, type_command)
 
-        issue_id = self.ytClient.create_issue(project, summary, description)
-        self.ytClient.run_command(Command(issues=[str(format(issue_id['id']))], query=cmd))
+        issue_id = self.ytClient.create_issue(project, summary, description, return_fields=['id', 'idReadable'])
+        self.ytClient.run_command(Command(issues=[issue_id], query=cmd))
 
-        return json.loads(issue_id, encoding='utf-8')
+        return issue_id
