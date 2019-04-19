@@ -28,7 +28,7 @@ class TattlerBot:
                                                title=message_parts['summery'],
                                                body=message_parts['details'])
 
-        await self.bot.say('Bug: {title} was created with id {id}', title=message_parts['summery'], id=issue['id'])
+        await self.bot.say('Bug: {title} was created with id {id}'.format(title=message_parts['summery'], id=issue['idReadable']))
 
     @commands.command(pass_context=True)
     async def request(self, context, *, message):
@@ -48,7 +48,7 @@ class TattlerBot:
                                                    title=message_parts['summery'],
                                                    body=message_parts['details'])
 
-        await self.bot.say('Request: {title} was created with id {id}', title=message_parts['summery'], id=issue['id'])
+        await self.bot.say('Request: {title} was created with id {id}'.format(title=message_parts['summery'], id=issue['idReadable']))
 
     def channel_valid(self, channel, config_tag):
         return self.configManager.Discord[config_tag] == 'ANY' or self.configManager.Discord[config_tag] == channel.name
